@@ -7,3 +7,4 @@
 * [Mini Review: Deep Learning for Atrial Segmentation From Late Gadolinium-Enhanced MRIs](https://www.frontiersin.org/articles/10.3389/fcvm.2020.00086/full)<br><br>
 * [Multi-Task Learning for  Left Atrial Segmentation on GE-MRI](https://arxiv.org/pdf/1810.13205.pdf)<br><br>
 * [Uncertainty-aware Self-ensembling Model for Semi-supervised 3D Left Atrium Segmentation](https://arxiv.org/pdf/1907.07034v1.pdf)<br><br>
+* [Deep Learning Techniques for Medical Image Segmentation: Achievements and Challenges](https://link.springer.com/content/pdf/10.1007/s10278-019-00227-x.pdf)
