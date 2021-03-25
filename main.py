@@ -60,7 +60,7 @@ for epoch in range(epochs):
         loss.backward()
         optimizer.step()
         avg_loss += loss.item()
-        
+    
         if (i+1)%10 ==0:
             print("Epoch: ", epoch+1, "iteration : ", i+1, "loss: ", loss.item())
 
@@ -75,6 +75,6 @@ for epoch in range(epochs):
 # loss = nn.BCELoss()
 # input = torch.randn(3, requires_grad=True)
 # target = torch.empty(3).random_(2)
-# output = loss(m(input), target)
+# output = loss(m(input), tarlget)
 # print(target.dtype)
 # output.backward()

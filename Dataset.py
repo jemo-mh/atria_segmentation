@@ -95,5 +95,5 @@ test_loader  = DataLoader(dataset = test_dataset, batch_size = batch_size, shuff
 #     plt.subplot(2,2,4)
 #     plt.imshow(Y[3,:,:], cmap='gray')
 #     plt.show()
-    # print(X.shape, X.dtype)
-    # print(Y.shape)
+#     print(X.shape, X.dtype)
+#     print(Y.shape)
