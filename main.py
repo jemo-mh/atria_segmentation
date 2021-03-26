@@ -1,3 +1,4 @@
+#lib
 import cv2 as cv
 import numpy as np
 from matplotlib import pyplot as plt
@@ -9,53 +10,53 @@ from PIL import Image
 import torch
 from tqdm import tqdm
 from torch import nn, optim
+#.py
+from utils.Dataset import CustomDataset
+from UNet_3 import UNet
 
-# from Dataset import train_loader, test_loader
-# from UNet import Build_UNet, Conv_Block, Upconv_Block
-
-# import data_loader
-# import UNet_1
-import UNet_3
-
-
-# import UNet
-import Dataset
-# print(Dataset.X_train)
 device = torch.device("cuda:0" if torch.cuda.is_available() else 'cpu')
-
 PATH ='/home/gpu/Workspace/jm/left_atrial/dataset'
-train_dataset = Dataset.train_dataset
-test_dataset = Dataset.test_dataset
 
-train_loader = Dataset.train_loader
-test_loader= Dataset.test_loader
+batch_size =16
+train_dataset = CustomDataset(PATH, train=True)
+test_dataset = CustomDataset(PATH, train=False)
 
-# unet = UNet_1.Build_UNet()
-unet = UNet_3.UNet().to(device)
+train_loader = DataLoader(dataset = train_dataset, batch_size = batch_size, shuffle = False, num_workers=0)
+test_loader = DataLoader(dataset = test_dataset, batch_size = batch_size, shuffle = False, num_workers=0)
 
-criterion = nn.BCELoss()
+print(len(train_dataset), len(test_dataset))
+
+
+unet = UNet().to(device)
+# criterion = nn.BCELoss()
+criterion = nn.CrossEntropyLoss()
+m= nn.Sigmoid()
 optimizer = optim.Adam(unet.parameters(), lr = 0.001)
 
-epochs = 100
+epochs =50
+
 for epoch in range(epochs):
     avg_loss=0
     avg_acc =0
-    total_batch = len(train_dataset)//Dataset.batch_size
-    # print(total_batch)
+    total_batch = len(train_dataset)//batch_size
+    print(total_batch)
 
     for i, (batch_img, batch_lab) in enumerate(train_loader):
         X =batch_img.to(device)
-        Y = batch_lab.to(device)
+        Y = batch_lab.to(device, dtype = torch.long)
         print("X.shape", X.shape)
         print(X.dtype)
         print("Y.shape", Y.shape)
         print(Y.dtype)        
         optimizer.zero_grad()
         y_pred = unet.forward(X)
-        print(y_pred.shape, y_pred.dtype)
-        _,predicted = torch.max(y_pred.data, 1)
-        print(predicted.shape, predicted.dtype)
-        loss = criterion(predicted.to(torch.float), Y.to(torch.float))
+        print("ypred ",y_pred, y_pred.shape, y_pred.dtype)
+        # _,predicted = torch.max(y_pred.data, 1)
+        
+        # print("predicted",predicted, predicted.shape, predicted.dtype)
+        # loss = criterion(m(predicted), Y.type(torch.float))
+        # loss = criterion(predicted, Y)
+        loss = criterion(y_pred, Y)
 
         loss.backward()
         optimizer.step()
@@ -64,17 +65,3 @@ for epoch in range(epochs):
         if (i+1)%10 ==0:
             print("Epoch: ", epoch+1, "iteration : ", i+1, "loss: ", loss.item())
 
-
-# X= torch.randn(16, 1,256,256).to(device)
-# print(X.shape)
-# y_pred = unet(X)
-# # print(y_pred)
-
-
-# m = nn.Sigmoid()
-# loss = nn.BCELoss()
-# input = torch.randn(3, requires_grad=True)
-# target = torch.empty(3).random_(2)
-# output = loss(m(input), tarlget)
-# print(target.dtype)
-# output.backward()
