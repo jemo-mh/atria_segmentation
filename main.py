@@ -50,7 +50,7 @@ for epoch in range(epochs):
         print(Y.dtype)        
         optimizer.zero_grad()
         y_pred = unet.forward(X)
-        print("ypred ",y_pred, y_pred.shape, y_pred.dtype)
+        print("ypred ", y_pred.shape, y_pred.dtype)
         # _,predicted = torch.max(y_pred.data, 1)
         
         # print("predicted",predicted, predicted.shape, predicted.dtype)
