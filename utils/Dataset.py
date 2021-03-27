@@ -41,8 +41,8 @@ class CustomDataset(Dataset):
         lab_name = self.Y[idx]
         png_img =Image.open(os.path.join(self.img_path, img_name))
         annot_img = Image.open(os.path.join(self.label_path, lab_name))
-        
-        png = self.img_transform(png_img)
+
+        png = self.img_transform(png_img)        
         annot = self.tgt_transform(annot_img)
         annot = torch.tensor(annot).long()
         return png, annot   

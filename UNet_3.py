@@ -60,6 +60,7 @@ class UNet(nn.Module):
         
         x = self.dconv_up1(x)
         out1 = self.conv_last1(x)
+        print(out1.shape)
         
         return out1
     

@@ -12,7 +12,8 @@ from tqdm import tqdm
 from torch import nn, optim
 #.py
 from utils.Dataset import CustomDataset
-from UNet_3 import UNet
+# from UNet_3 import UNet
+from UNet_1 import Build_UNet
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else 'cpu')
 PATH ='/home/gpu/Workspace/jm/left_atrial/dataset'
@@ -27,41 +28,21 @@ test_loader = DataLoader(dataset = test_dataset, batch_size = batch_size, shuffl
 print(len(train_dataset), len(test_dataset))
 
 
-unet = UNet().to(device)
-# criterion = nn.BCELoss()
-criterion = nn.CrossEntropyLoss()
+# unet = UNet().to(device)
+unet =Build_UNet().to(device)
+criterion = nn.BCELoss()
+# criterion = nn.CrossEntropyLoss()
+
 m= nn.Sigmoid()
 optimizer = optim.Adam(unet.parameters(), lr = 0.001)
 
 epochs =50
 
-for epoch in range(epochs):
-    avg_loss=0
-    avg_acc =0
-    total_batch = len(train_dataset)//batch_size
-    print(total_batch)
-
-    for i, (batch_img, batch_lab) in enumerate(train_loader):
-        X =batch_img.to(device)
-        Y = batch_lab.to(device, dtype = torch.long)
-        print("X.shape", X.shape)
-        print(X.dtype)
-        print("Y.shape", Y.shape)
-        print(Y.dtype)        
-        optimizer.zero_grad()
-        y_pred = unet.forward(X)
-        print("ypred ",y_pred, y_pred.shape, y_pred.dtype)
-        # _,predicted = torch.max(y_pred.data, 1)
-        
-        # print("predicted",predicted, predicted.shape, predicted.dtype)
-        # loss = criterion(m(predicted), Y.type(torch.float))
-        # loss = criterion(predicted, Y)
-        loss = criterion(y_pred, Y)
-
-        loss.backward()
-        optimizer.step()
-        avg_loss += loss.item()
-    
-        if (i+1)%10 ==0:
-            print("Epoch: ", epoch+1, "iteration : ", i+1, "loss: ", loss.item())
-
+for X, Y in train_loader:
+    # print("X", X)
+    # print("Y",Y)
+    X = np.transpose(X,[0,2,3,1])
+    X = X.to(device)
+    Y = Y.to(device)
+    y_pred = unet(X).forward
+    print(y_pred.dtype, y_pred.shape)

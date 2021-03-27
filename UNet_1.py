@@ -108,7 +108,7 @@ class Upconv_Block(nn.Module):
         return x
 
 class Build_UNet(nn.Module):
-    def __init__(self, input_channel=1, num_classes=5):
+    def __init__(self, input_channel=1, num_classes=2):
         super(Build_UNet, self).__init__()
         self.conv1 = Conv_Block(input_channel, 64)
         self.conv2 = Conv_Block(64, 128, pool=True)
@@ -125,6 +125,7 @@ class Build_UNet(nn.Module):
         
     def forward(self, x):
         en1 = self.conv1(x) #/2
+        print(en1.shape)
         en2 = self.conv2(en1) #/4
         en3 = self.conv3(en2) #/8
         en4 = self.conv4(en3) #/16
