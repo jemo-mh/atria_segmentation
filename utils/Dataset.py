@@ -44,7 +44,7 @@ class CustomDataset(Dataset):
         
         png = self.img_transform(png_img)
         annot = self.tgt_transform(annot_img)
-        
+        annot = torch.tensor(annot).long()
         return png, annot   
 
 
